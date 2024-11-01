@@ -27,6 +27,8 @@ function init() {
     store.newRound();
   });
   view.bindPlayerMoveEvent((square) => {
+    console.log(square);
+    
     const existingMove = store.game.currentGameMoves.find(
       (move) => move.squareId === +square.id
     );

@@ -14,6 +14,7 @@ class View {
     this.$.p1Wins = this.#qs('[data-id=p1-wins]');
     this.$.p2Wins = this.#qs('[data-id=p2-wins]');
     this.$.ties = this.#qs('[data-id=ties]');
+    this.$.grid = this.#qs('[data-id=grid]');
 
     this.$$.squares = this.#qsAll('[data-id="square"]');
 
@@ -38,7 +39,7 @@ class View {
       ties
     );
     this.#initializeMoves(currentGameMoves);
-    
+
     if (isComplete) {
       this.#openModal(winner ? `${winner.name} wins!` : 'Tie!');
       return;
@@ -66,9 +67,7 @@ class View {
     this.$.newRoundBtn.addEventListener('click', handler);
   }
   bindPlayerMoveEvent(handler) {
-    this.$$.squares.forEach((square) => {
-      square.addEventListener('click', () => handler(square));
-    });
+    this.#delegate(this.$.grid, '[data-id="square"]', 'click', handler);
   }
   /**
    * Dom helper methods
@@ -148,6 +147,14 @@ class View {
       throw new Error(`Element list not found: ${selector}`);
     }
     return elList;
+  }
+
+  #delegate(el, selector, eventKey, handler) {
+    el.addEventListener(eventKey, (event) => {
+      if (event.target.matches(selector)) {
+        handler(event.target);
+      }
+    });
   }
 }
 
