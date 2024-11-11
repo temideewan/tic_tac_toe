@@ -1,7 +1,8 @@
 import Store from './store.js';
+import { Player } from './types';
 import View from './view.js';
 
-const players = [
+const players: Player[] = [
   { id: 1, name: 'Player 1', iconClass: 'fa-x', colorClass: 'turquoise' },
   { id: 2, name: 'Player 2', iconClass: 'fa-o', colorClass: 'yellow' },
   // add more players as needed...
@@ -20,15 +21,14 @@ function init() {
     view.render(store.game, store.stats);
   });
 
-  view.bindResetEvent((event) => {
+  view.bindResetEvent(() => {
     store.reset();
   });
-  view.bindNewRoundEvent((event) => {
+  view.bindNewRoundEvent(() => {
     store.newRound();
   });
   view.bindPlayerMoveEvent((square) => {
     console.log(square);
-    
     const existingMove = store.game.currentGameMoves.find(
       (move) => move.squareId === +square.id
     );

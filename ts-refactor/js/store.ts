@@ -1,15 +1,16 @@
-const initialState = {
+import { GameState, Player } from './types';
+
+const initialState: GameState = {
   currentGameMoves: [],
   history: {
     currentRoundGames: [],
     allGames: [],
   },
 };
+
 export default class Store extends EventTarget {
-  constructor(key, players) {
+  constructor(private storageKey: string, private players: Player[]) {
     super();
-    this.storageKey = key;
-    this.players = players;
   }
 
   get stats() {
@@ -67,7 +68,7 @@ export default class Store extends EventTarget {
     };
   }
 
-  playerMove(squareId) {
+  playerMove(squareId: number) {
     const stateClone = structuredClone(this.#getState());
     stateClone.currentGameMoves.push({
       squareId,
@@ -98,11 +99,11 @@ export default class Store extends EventTarget {
     this.#saveState(stateClone);
   }
 
-  #getState() {
+  #getState(): GameState {
     const item = window.localStorage.getItem(this.storageKey);
-    return item ? JSON.parse(item) : initialState;
+    return item ? (JSON.parse(item) as GameState) : initialState;
   }
-  #saveState(stateOrFn) {
+  #saveState(stateOrFn: GameState | ((prevState: GameState) => GameState)) {
     const prevState = this.#getState();
     let newState;
 
